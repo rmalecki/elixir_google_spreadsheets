@@ -498,14 +498,14 @@ defmodule GSS.Spreadsheet do
 
     @spec range(integer(), integer(), integer(), integer()) :: String.t
     def range(row_from, row_to, column_from, column_to)
-    when row_from <= row_to and column_from <= column_to and row_to < 1001 do
+    when row_from <= row_to and column_from <= column_to and row_to < 20001 do
         column_from_letters = col_number_to_letters(column_from)
         column_to_letters = col_number_to_letters(column_to)
         "#{column_from_letters}#{row_from}:#{column_to_letters}#{row_to}"
     end
     def range(_, _, _, _) do
         raise GSS.InvalidRange,
-            message: "Max rows 1000, `to` value should be greater than `from`"
+            message: "Max rows 20000, `to` value should be greater than `from`"
     end
     @spec range(integer(), integer(), integer(), integer(), state) :: String.t
     def range(row_from, row_to, column_from, column_to, state) do
