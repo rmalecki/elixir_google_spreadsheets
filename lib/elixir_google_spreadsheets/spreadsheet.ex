@@ -2,7 +2,7 @@ defmodule GSS.Spreadsheet do
     @moduledoc """
     Model of Google Spreadsheet for external interaction.
 
-    Maximum size of the supported canvas is 1000 x 26 cells.
+    Maximum size of the supported canvas is 20000 x 26 cells.
     """
 
     require Logger
@@ -186,7 +186,7 @@ defmodule GSS.Spreadsheet do
     Get total number of rows from spreadsheets.
     """
     def handle_call(:rows, _from, %{spreadsheet_id: spreadsheet_id} = state) do
-        query = "#{spreadsheet_id}/values/#{maybe_attach_list(state)}#{range(1, 1000, 1, 1)}"
+        query = "#{spreadsheet_id}/values/#{maybe_attach_list(state)}#{range(1, 20000, 1, 1)}"
 
         case spreadsheet_query(:get, query) do
             {:json, %{"values" => values}} ->
@@ -486,14 +486,14 @@ defmodule GSS.Spreadsheet do
     @spec range(integer(), integer(), integer(), integer()) :: String.t
     def range(row_from, row_to, column_from, column_to)
     when row_from <= row_to and column_from <= column_to
-    and row_to < 1001 do
+    and row_to < 20001 do
         column_from_letters = col_number_to_letters(column_from)
         column_to_letters = col_number_to_letters(column_to)
         "#{column_from_letters}#{row_from}:#{column_to_letters}#{row_to}"
     end
     def range(_, _, _, _) do
         raise GSS.InvalidRange,
-            message: "Max rows 1000, `to` value should be greater than `from`"
+            message: "Max rows 20000, `to` value should be greater than `from`"
     end
     @spec range(integer(), integer(), integer(), integer(), state) :: String.t
     def range(row_from, row_to, column_from, column_to, state) do
